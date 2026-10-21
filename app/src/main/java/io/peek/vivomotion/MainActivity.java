@@ -248,6 +248,7 @@ public final class MainActivity extends AppCompatActivity {
      String result=readMode();return original.equals(result)?result:"ERROR: verify failed "+result;
     }catch(Exception e){return "ERROR: "+e.getMessage();}
    }
+   public String inspectRootlessCapabilities(){return "Shizuku is required for SELinux diagnostics";}
    public String diagnostics(){return "backend=WRITE_SETTINGS\nmode="+readMode()+"\nno system properties changed";}
    public String trial(int mode,int seconds){return "ERROR: Shizuku required";}
    public String confirm(){return "ERROR: Shizuku required";}
