@@ -88,6 +88,11 @@ public final class MotionShellService extends IMotionShell.Stub {
      .append(cmd("/system/bin/getprop","-Z",key)).append("\n");
   }
   final String testKey = "debug.originmotion.probe";
+  String probeContext = cmd("/system/bin/getprop","-Z",testKey);
+  String targetContext = cmd("/system/bin/getprop","-Z","persist.is_debug_params");
+  report.append("\nProbe context: ").append(probeContext);
+  report.append("\nTarget context: ").append(targetContext);
+  if (!probeContext.equals(targetContext)) report.append("\nWarning: debug-property permission is NOT proof of target property permission");
   String original = cmd("/system/bin/getprop",testKey);
   if (original.isEmpty()) {
    String write = cmd("/system/bin/setprop",testKey,"1");
