@@ -26,8 +26,8 @@ jobs:
       - name: Sign and verify (v1+v2+v3)
         shell: bash
         env:
-          KEYSTORE_B64: \${{ secrets.VIVO_MOTION_KEYSTORE_B64 }}
-          KEYSTORE_PASS: \${{ secrets.VIVO_MOTION_SIGN_PASSWORD }}
+          KEYSTORE_B64: ${{ secrets.VIVO_MOTION_KEYSTORE_B64 }}
+          KEYSTORE_PASS: ${{ secrets.VIVO_MOTION_SIGN_PASSWORD }}
         run: |
           set -euo pipefail
           mkdir -p output
