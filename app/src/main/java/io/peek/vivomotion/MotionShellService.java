@@ -69,6 +69,42 @@ public final class MotionShellService extends IMotionShell.Stub {
   pending.cancel(false); pending = null; beforeTrial = null;
   return "CONFIRMED: " + readMode();
  }
+
+ public String inspectRootlessCapabilities() {
+  StringBuilder report = new StringBuilder("Rootless diagnostics\n");
+  report.append("uid/context: ").append(cmd("/system/bin/id")).append("\n");
+  report.append("Security patch: ").append(cmd("/system/bin/getprop","ro.build.version.security_patch")).append("\n");
+  String[] keys = {
+   "persist.is_debug_params",
+   "open.persist.rect.centerx.stiffness",
+   "open.persist.rect.centerx.dampingradio",
+   "close.persist.rect.nrt_winBlur.stiffnes",
+   "multiple.close.persist.rect.CENTER.X.stiffness"
+  };
+  for (String key : keys) {
+   report.append("\n").append(key).append("\nvalue=")
+     .append(cmd("/system/bin/getprop",key))
+     .append("\nSELinux=")
+     .append(cmd("/system/bin/getprop","-Z",key)).append("\n");
+  }
+  final String testKey = "debug.originmotion.probe";
+  String original = cmd("/system/bin/getprop",testKey);
+  if (original.isEmpty()) {
+   String write = cmd("/system/bin/setprop",testKey,"1");
+   String after = cmd("/system/bin/getprop",testKey);
+   boolean allowed = !write.startsWith("ERROR:") && "1".equals(after);
+   report.append("\nTemporary default_prop write: ").append(allowed ? "ALLOWED" : "BLOCKED");
+   if (!allowed) report.append("\n").append(write);
+   if ("1".equals(after)) {
+    String cleared = cmd("/system/bin/setprop",testKey,"");
+    report.append("\nProbe cleanup: ").append(cleared.startsWith("ERROR:") ? cleared : "OK");
+   }
+  } else {
+   report.append("\nProbe skipped: temporary property already exists");
+  }
+  report.append("\nNo launcher settings or properties changed");
+  return report.toString();
+ }
  public String diagnostics() {
   return "uid=" + android.os.Process.myUid() + "\n"
    + "mode=" + readMode() + "\n"

@@ -169,7 +169,14 @@ public final class MainActivity extends AppCompatActivity {
   LinearLayout diagnostics=section(root,"Диагностика","Только чтение, системные APK и свойства не изменяются");
   MaterialButton test=button("Проверить параметры",true);
   test.setOnClickListener(v->task(IMotionShell::diagnostics,s->diag.setText(s)));
+
   diagnostics.addView(test,margin(10));
+  MaterialButton capability=button("Проверить SELinux и Shizuku",true);
+  capability.setOnClickListener(v->task(IMotionShell::inspectRootlessCapabilities,result->diag.setText(result)));
+  diagnostics.addView(capability,margin(7));
+  TextView warning=text("Тестируется только временное debug-свойство. Параметры системного лаунчера не изменяются",12,false);
+  diagnostics.addView(warning,margin(8));
+
   diag=text("Проверка ещё не запускалась",12,false);diag.setTextIsSelectable(true);diagnostics.addView(diag,margin(10));
  }
  private Slider makeSlider(int initial){
