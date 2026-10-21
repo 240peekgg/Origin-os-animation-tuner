@@ -47,12 +47,13 @@ jobs:
           "$TOOLS/apksigner" sign \
             --ks output/signing.jks --ks-key-alias originmotion \
             --ks-pass "env:KEY_PASS" --key-pass "env:KEY_PASS" \
+            --min-sdk-version 21 \
             --v1-signing-enabled true \
             --v2-signing-enabled true \
             --v3-signing-enabled true \
             --v4-signing-enabled false \
             --out output/OriginOS-Animation-Tuner.apk output/aligned.apk
-          "$TOOLS/apksigner" verify --verbose --print-certs output/OriginOS-Animation-Tuner.apk | tee output/signatures.txt
+          "$TOOLS/apksigner" verify --min-sdk-version 21 --verbose --print-certs output/OriginOS-Animation-Tuner.apk | tee output/signatures.txt
           grep -Fq "Verified using v1 scheme (JAR signing): true" output/signatures.txt
           grep -Fq "Verified using v2 scheme (APK Signature Scheme v2): true" output/signatures.txt
           grep -Fq "Verified using v3 scheme (APK Signature Scheme v3): true" output/signatures.txt
