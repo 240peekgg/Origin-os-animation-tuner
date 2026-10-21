@@ -111,33 +111,6 @@ public final class MainActivity extends AppCompatActivity {
    try{startActivity(i);}catch(Exception e){message(e.getMessage());}
   });access.addView(local,margin(6));
 
-  LinearLayout sample=section(root,"Предпросмотр","Открытие и закрытие регулируются независимо в демонстрации");
-  preview=new MotionPreview(this);
-  sample.addView(preview,new LinearLayout.LayoutParams(-1,dp(270)));
-  LinearLayout actions=new LinearLayout(this);
-  actions.setOrientation(LinearLayout.HORIZONTAL);
-  MaterialButton open=button("Открыть",false),close=button("Закрыть",true);
-  actions.addView(open,new LinearLayout.LayoutParams(0,dp(50),1));
-  LinearLayout.LayoutParams closeP=new LinearLayout.LayoutParams(0,dp(50),1);closeP.leftMargin=dp(10);
-  actions.addView(close,closeP);sample.addView(actions,margin(12));
-  open.setOnClickListener(v->preview.play(true,openingMs));
-  close.setOnClickListener(v->preview.play(false,closingMs));
-  openingText=text("",15,true);sample.addView(openingText,margin(18));
-  Slider openSlider=makeSlider(openingMs);sample.addView(openSlider);
-  openSlider.addOnChangeListener((s,val,fromUser)->{
-   openingMs=Math.round(val);openingText.setText("Открытие · "+openingMs+" мс");
-   if(fromUser){prefs.edit().putInt("preview_open",openingMs).apply();preview.play(true,openingMs);}
-  });
-  closingText=text("",15,true);sample.addView(closingText,margin(9));
-  Slider closeSlider=makeSlider(closingMs);sample.addView(closeSlider);
-  closeSlider.addOnChangeListener((s,val,fromUser)->{
-   closingMs=Math.round(val);closingText.setText("Закрытие · "+closingMs+" мс");
-   if(fromUser){prefs.edit().putInt("preview_close",closingMs).apply();preview.play(false,closingMs);}
-  });
-  openingText.setText("Открытие · "+openingMs+" мс");closingText.setText("Закрытие · "+closingMs+" мс");
-  TextView note=text("Ползунки изменяют только предпросмотр. Произвольная независимая скорость системных переходов без root пока не подтверждена",12,false);
-  note.setTextColor(color(com.google.android.material.R.attr.colorOnSurfaceVariant,0xffb4b4c2));sample.addView(note,margin(12));
-
   LinearLayout system=section(root,"Системная анимация","Реальная настройка Vivo · enter_exit_app_animation");
   current=text("Считываем режим…",14,false);system.addView(current,margin(12));
   modes=new ChipGroup(this);modes.setSingleSelection(true);
@@ -178,6 +151,34 @@ public final class MainActivity extends AppCompatActivity {
   diagnostics.addView(warning,margin(8));
 
   diag=text("Проверка ещё не запускалась",12,false);diag.setTextIsSelectable(true);diagnostics.addView(diag,margin(10));
+  LinearLayout sample=section(root,"Лаборатория анимации","Открытие и закрытие регулируются независимо в демонстрации");
+  preview=new MotionPreview(this);
+  sample.addView(preview,new LinearLayout.LayoutParams(-1,dp(270)));
+  LinearLayout actions=new LinearLayout(this);
+  actions.setOrientation(LinearLayout.HORIZONTAL);
+  MaterialButton open=button("Открыть",false),close=button("Закрыть",true);
+  actions.addView(open,new LinearLayout.LayoutParams(0,dp(50),1));
+  LinearLayout.LayoutParams closeP=new LinearLayout.LayoutParams(0,dp(50),1);closeP.leftMargin=dp(10);
+  actions.addView(close,closeP);sample.addView(actions,margin(12));
+  open.setOnClickListener(v->preview.play(true,openingMs));
+  close.setOnClickListener(v->preview.play(false,closingMs));
+  openingText=text("",15,true);sample.addView(openingText,margin(18));
+  Slider openSlider=makeSlider(openingMs);sample.addView(openSlider);
+  openSlider.addOnChangeListener((s,val,fromUser)->{
+   openingMs=Math.round(val);openingText.setText("Открытие · "+openingMs+" мс");
+   if(fromUser){prefs.edit().putInt("preview_open",openingMs).apply();preview.play(true,openingMs);}
+  });
+  closingText=text("",15,true);sample.addView(closingText,margin(9));
+  Slider closeSlider=makeSlider(closingMs);sample.addView(closeSlider);
+  closeSlider.addOnChangeListener((s,val,fromUser)->{
+   closingMs=Math.round(val);closingText.setText("Закрытие · "+closingMs+" мс");
+   if(fromUser){prefs.edit().putInt("preview_close",closingMs).apply();preview.play(false,closingMs);}
+  });
+  openingText.setText("Открытие · "+openingMs+" мс");closingText.setText("Закрытие · "+closingMs+" мс");
+  TextView note=text("Ползунки изменяют только предпросмотр. Произвольная независимая скорость системных переходов без root пока не подтверждена",12,false);
+  note.setTextColor(color(com.google.android.material.R.attr.colorOnSurfaceVariant,0xffb4b4c2));sample.addView(note,margin(12));
+
+
  }
  private Slider makeSlider(int initial){
   Slider s=new Slider(this);s.setValueFrom(100);s.setValueTo(1200);s.setStepSize(10);
